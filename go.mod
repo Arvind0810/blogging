@@ -6,7 +6,7 @@ require (
 	github.com/andybalholm/brotli v1.1.1 // indirect
 	github.com/fxamacker/cbor/v2 v2.8.0 // indirect
 	github.com/gofiber/fiber/v2 v2.52.6 // indirect
-	github.com/gofiber/fiber/v3 v3.0.0-beta.4 // indirect
+	// github.com/gofiber/fiber/v3 v3.0.0-beta.4 // indirect
 	github.com/gofiber/jwt/v3 v3.3.10 // indirect
 	github.com/gofiber/schema v1.3.0 // indirect
 	github.com/gofiber/utils/v2 v2.0.0-beta.8 // indirect
