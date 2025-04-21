@@ -14,4 +14,7 @@ func PostRoutes(app *fiber.App) {
 	api.Use(middleware.Protected()) // Protect all routes under /api/posts with authentication middleware
 	api.Post("/", controllers.CreatePost)
 	api.Get("/me", controllers.GetMyPosts)
+	api.Put("/:id", controllers.UpdatePost)
+	api.Delete("/:id", controllers.DeletePost)
+	api.Get("/slug/:slug", controllers.GetPostBySlug)
 }
