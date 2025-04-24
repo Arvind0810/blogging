@@ -1,5 +1,7 @@
+// app/layout.js
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import AuthLayout from "@/Components/login_layout"; // safe now
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,10 +21,20 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@uiw/react-md-editor@3.18.6/dist/markdown-editor.css"
+        />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@uiw/react-markdown-preview@3.18.6/dist/markdown.css"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <AuthLayout>{children}</AuthLayout>
       </body>
     </html>
   );
