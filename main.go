@@ -8,6 +8,7 @@ import (
 	"github.com/Arvind0810/blogging.git/database"
 	"github.com/Arvind0810/blogging.git/routes"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
 )
 
@@ -26,6 +27,10 @@ func main() {
 
 	app := fiber.New()
 
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     "http://localhost:3000",
+		AllowCredentials: true,
+	}))
 	routes.SetupRoutes(app)
 
 	port := os.Getenv("PORT")

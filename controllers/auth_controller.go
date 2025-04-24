@@ -22,7 +22,7 @@ func Register(c *fiber.Ctx) error {
 		Username: data["username"],
 		Email:    data["email"],
 		Password: password,
-		Role:    "user",
+		Role:    data["role"],
 	}
 
 	result := database.DB.Create(&user)

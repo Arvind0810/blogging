@@ -1,11 +1,14 @@
 package controllers
 
 import (
+	"fmt"
+
 	"github.com/Arvind0810/blogging.git/database"
 	"github.com/Arvind0810/blogging.git/middleware"
 	"github.com/Arvind0810/blogging.git/models"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
+	"gorm.io/gorm"
 )
 
 func CreatePost(c *fiber.Ctx) error {
@@ -17,6 +20,16 @@ func CreatePost(c *fiber.Ctx) error {
 	}
 
 	post.UserID = userID
+
+	slug, err := GenerateUniqueSlug(database.DB, post.Slug)
+
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"error":"Failed to generate slug",
+		})
+	}
+
+	post.Slug = slug
 
 	if err := database.DB.Create(&post).Error; err != nil {
 		return c.Status(500).JSON(fiber.Map{"error": "Failed to create post"})
@@ -41,7 +54,7 @@ func GetMyPosts(c *fiber.Ctx) error {
 
 	var posts []models.Post
 
-	if err := database.DB.Where("user_id = ?", userID).Find(&posts).Error; err != nil {
+	if err := database.DB.Preload("User").Where("user_id = ?", userID).Find(&posts).Error; err != nil {
 		return c.Status(500).JSON(fiber.Map{"error": "Failed to retrieve posts"})
 	}
 
@@ -106,4 +119,21 @@ func DeletePost(c *fiber.Ctx) error {
 
 	database.DB.Delete(&post)
 	return c.Status(204).JSON(fiber.Map{"message": "Post deleted successfully"})
+}
+
+func GenerateUniqueSlug(db *gorm.DB, baseSlug string) (string, error) {
+	slug := baseSlug
+	var count int64
+	suffix := 1
+
+	for {
+		db.Model(&models.Post{}).Where("slug = ?", slug).Count(&count)
+		if count == 0 {
+			break
+		}
+
+		suffix++
+		slug = fmt.Sprintf("%s-%d", slug, suffix)
+	}
+	return slug, nil
 }
